@@ -46,7 +46,7 @@ class Review(models.Model):
         return u'%s %s' % (self.id, self.date)
 
 class Price(models.Model):
-    list_id = models.ForeignKey(Review)
+    review = models.ForeignKey(Review)
     sku = models.ForeignKey(Card)
     price = models.FloatField()
     

@@ -12,7 +12,6 @@ urlpatterns = patterns('',
     # url(r'^spymarket/', include('spymarket.foo.urls')),
     url(r'^list/(?P<list_id>\d+)/$', 'main.views.list_detail'),
     url(r'^list/', 'main.views.all_list'),
-    url(r'^form/', 'main.views.form'),
     url(r'^store/', 'main.views.store_compare', name='store_compare'),
     
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -20,4 +19,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    
+    url(r'^review/(?P<review_id>\d+)/$', 'main.views.review_detail'),
+#    url(r'^review/', 'main.views.review'),    
 )

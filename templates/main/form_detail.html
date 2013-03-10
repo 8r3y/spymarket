@@ -1,0 +1,33 @@
+<h1>Обзор №{{ review.id }}</h1>
+
+{{ review.date }}<br>
+{{ review.user_name }}<br>
+{{ review.place.name }}<br>
+
+{% for card in cards %}
+{{ card.classif_name }}<br>
+{{ card.name }}<br>
+{{ card.base_price }}<br>
+{% endfor %}
+
+
+<form action="/contact/" method="post">{% csrf_token %}
+{% for card in cards %}
+<p>{{ card.classif_name }}, {{ card.base_price }}<input type="text" name="{{ card.id }}"></p>
+{% endfor %}
+        <input type="submit" value="Сохранить">
+</form>
+
+
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/review/{{ review.id }}/send/" method="post">
+{% csrf_token %}
+{% for card in cards %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ card.name }}" />
+    <label for="review{{ forloop.counter }}">{{ card.name }}</label><br />
+{% endfor %}
+<input type="submit" value="Сохранить" />
+</form>

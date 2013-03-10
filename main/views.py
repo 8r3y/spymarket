@@ -1,7 +1,9 @@
 # Create your views here.
-from django.template import Context, loader
-from main.models import Place, Company, Concurent, District, Review, StoreDetail, Stores_q
-from django.http import HttpResponse
+from django.template import Context, loader, RequestContext
+from main.models import Place, Company, Concurent, District, Review, StoreDetail, Stores_q, Price, Card
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404
+from django.core.urlresolvers import reverse
 
 #from django.db import connection, transaction
 
@@ -73,4 +75,28 @@ def all_list(request):
         'all_stores': all_stores,      
         })
     return HttpResponse(t.render(c))
+
+def review_detail(request, review_id):
+    r = get_object_or_404(Review, pk=review_id)
+    p = Place.objects.get(id=4)
+    cards = Card.objects.all()
+    classif = Card.objects.distinct()
+    try:
+        selected_choice = p.review_set.get(pk=request.POST['place'])
+    except (KeyError, Review.DoesNotExist):
+        # Redisplay the poll voting form.
+        return render_to_response('main/form_detail.html', {
+            'classif': classif,                                                
+            'cards': cards,                                                
+            'place': p,
+            'review': r,
+            'error_message': "You didn't select a choice.",
+        }, context_instance=RequestContext(request))
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        return HttpResponseRedirect(reverse('main.views.store_compare', args=(p.id,)))
     

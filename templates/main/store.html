@@ -1,0 +1,9 @@
+{% if store_detail %}
+    <ul>
+    {% for place in store_detail %}
+        <li><a href="/store/{{ place.id }}/">{{ place.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No stores!</p>
+{% endif %}

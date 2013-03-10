@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Bootstrap 101 Template</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+<style type="text/css">
+.table {display:table; border: solid 1px; }
+.table div {display:table-cell; border-right: dotted 1px; }
+.table div div {display:table-row; border: dotted 1px; }
+</style>
+
+</head>
+
+<body>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+<p>Все магазины:</p>
+{% if stores and company_link and last_list %}
+<div class="table">
+    <div>
+        <div>Номер в БД</div>
+        <div>Название</div>
+        <div>Компания</div>
+		<div>Район</div>
+		<div>Кол-во касс</div>
+		<div>Последний обзор</div>
+		<div>Расчетный поток</div>
+		<div>Индекс цен - Бытовая химия</div>
+		<div>Индекс цен - Товары для дома</div>
+    </div>
+	{% for q in stores_q %}
+    <div> 
+		<div>{% if q.id %}{{ q.id }}{% else %}N/A{% endif %}</div>
+		<div>{% if q.place_name %}<a href="/store/{{ q.id }}/">{{ q.place_name }}</a>{% else %}N/A{% endif %}</div>
+		<div>{% if q.company_name %}<a href="/company/{{ q.company_id }}/">{{ q.company_name }}</a>{% else %}N/A{% endif %}</div>
+		<div>{% if q.district_name %}<a href="/district/{{ q.district_id }}/">{{ q.district_name }}</a>{% else %}N/A{% endif %}</div>
+		<div>{% if q.pos_quantity %}{% else %}N/A{% endif %}</div>
+		<div>{% if q.review %}{{ q.review }}{% else %}N/A{% endif %}</div>
+		<div>{% if q.customers %}{% else %}N/A{% endif %}</div>
+		<div>{% if q.price_bythim %}{% else %}N/A{% endif %}</div>
+		<div>{% if q.price_tovdoma %}{% else %}N/A{% endif %}</div>
+    </div>
+	{% endfor %}
+</div>
+{% else %}
+    <p>Нет магазинов!</p>
+{% endif %}
+
+<!-- Запрос, выполняющийся стандартными методами джанги>
+{% if stores and company_link and last_list %}
+<div class="table">
+    <div>
+        <div>Номер в БД</div>
+        <div>Название</div>
+        <div>Компания</div>
+		<div>Район</div>
+		<div>Кол-во касс</div>
+		<div>Последний обзор</div>
+		<div>Расчетный поток</div>
+		<div>Индекс цен - Бытовая химия</div>
+		<div>Индекс цен - Товары для дома</div>
+    </div>
+	{% for place in stores %}
+    <div> 
+		<div>{{ place.id }}</div>
+		<div><a href="/store/{{ place.id }}/">{{ place.name }}</a></div>
+		<div><a href="/company/{{ place.company.id }}/">{{ place.company }}</a></div>
+		<div><a href="/district/{{ place.district.id }}/">{{ place.district }}</a></div>
+		<div>&nbsp;</div>
+		<div><a href="/review/{{ review.id }}/">{{ review.date }}</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+    </div>
+	{% endfor %}
+</div>
+{% else %}
+    <p>Нет магазинов!</p>
+{% endif %}
+<!-->
+
+<br>
+	{% for x in stores_q %}
+		<a href="/store/{{ x.id }}/">{{ x.place_name }}</a><br>
+		{% if x.review %}<a href="/review/{{ x.review }}/">{{ x.review }}</a><br>{% else %}N/A<br>{% endif %}
+	{% endfor %}
+<br>
+	{% for place in stores %}
+		{{ place.name }} , {{ place.review.date }}
+	{% endfor %}
+	
+</body>
+</html>

@@ -1,0 +1,10 @@
+﻿<p>Все магазины:</p>
+{% if stores %}
+    <ul>
+    {% for place in stores %}
+        <li><a href="/store/{{ place.id }}/">{{ place.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет магазинов!</p>
+{% endif %}

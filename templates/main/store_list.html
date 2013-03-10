@@ -1,0 +1,21 @@
+﻿<p>Наши магазины:</p>
+{% if our_stores %}
+    <ul>
+    {% for place in our_stores %}
+        <li><a href="/store/{{ place.id }}/">{{ place.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет магазинов!</p>
+{% endif %}
+
+<p>Магазины конкурентов:</p>
+{% if concurent_stores %}
+    <ul>
+    {% for place in concurent_stores %}
+        <li><a href="/store/{{ place.id }}/">{{ place.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет конкурентов!</p>
+{% endif %}

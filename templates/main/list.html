@@ -1,0 +1,17 @@
+﻿<p>Обзоры:</p>
+{% if last_list and all_stores %}
+    <ul>
+    {% for review in last_list.all %}
+        <li><a href="/list/{{ review.id }}/">{{ review.date }}</a></li>
+    {% endfor %}
+    {% for place in all_stores %}
+    {{ place.name }}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет магазинов!</p>
+{% endif %}
+
+    {% for place in all_stores %}
+    <li>{{ place.name }}</li>
+    {% endfor %}

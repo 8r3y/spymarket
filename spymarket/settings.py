@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'd:\\_work\\project\\spymarket\\sqlite.db',                      # Or path to database file if using sqlite3.
+        'NAME': 'C:\\Users\\Andy\\My Documents\\Workspace\\spymarket\\sqlite.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -72,7 +72,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "D:/_WORK/project/spymarket/static",
+    "C:/Users/Andy/My Documents/Workspace/spymarket/static",
 )
 
 # List of finder classes that know how to find static files in
@@ -109,7 +109,7 @@ ROOT_URLCONF = 'spymarket.urls'
 WSGI_APPLICATION = 'spymarket.wsgi.application'
 
 TEMPLATE_DIRS = (
-    'd:/_work/project/spymarket/templates',
+    'C:/Users/Andy/My Documents/Workspace/spymarket/templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -157,3 +157,9 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_HOST_USER = 'mind_art@mail.ru'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

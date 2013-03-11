@@ -1,12 +1,17 @@
 from django.db import models
 
 # Create your models here.
+class Classif(models.Model):
+    name = models.CharField(max_length=200)
+    sm_id = models.IntegerField()
+    def __unicode__(self):
+        return self.name
+
 class Card(models.Model):
     articul = models.CharField(max_length=14)
     name = models.CharField(max_length=200)
     bar = models.CharField(max_length=40)
-    classif = models.IntegerField()
-    classif_name = models.CharField(max_length=200) 
+    classif = models.ForeignKey(Classif)
     base_price = models.FloatField()
     def __unicode__(self):
         return self.name
@@ -20,10 +25,6 @@ class Company(models.Model):
     name = models.CharField(max_length=200)
     def __unicode__(self):
         return self.name
-
-class Classif(models.Model):
-    name = models.CharField(max_length=200)
-    sm_id = models.CharField(max_length=50)
     
 class Place(models.Model):
     name = models.CharField(max_length=200)
@@ -49,6 +50,9 @@ class Price(models.Model):
     review = models.ForeignKey(Review)
     sku = models.ForeignKey(Card)
     price = models.FloatField()
+    price_delta = models.FloatField()
+    def __unicode__ (self):
+        return u'%s %s %s' % (self.review, self.sku, self.price) 
     
 class Concurent(models.Model): 
     store = models.ForeignKey(Place, related_name='our')
@@ -72,4 +76,11 @@ class Stores_q(models.Model):
     place_name = models.CharField(max_length=200)
     district_name = models.CharField(max_length=200)
     company_name = models.CharField(max_length=200)
-    review = models.DateField()        
+    review = models.DateField()
+    
+class Classif_price(models.Model):
+    review = models.ForeignKey(Review)
+    classif = models.ForeignKey(Classif)
+    price_delta = models.FloatField()
+    def __unicode__ (self):
+        return u'%s %s %s' % (self.review, self.classif, self.price_delta)        

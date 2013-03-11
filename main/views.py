@@ -41,8 +41,19 @@ def store_list(request):
     return HttpResponse(t.render(c))
 
 def store_compare(request):
-    stores_q = Stores_q.objects.raw('SELECT mp.id id, mp.name place_name, mr.date review from main_place as mp '
-                                    'left join main_review as mr on mp.id = mr.place_id')
+    stores_q = Stores_q.objects.raw('SELECT mp.id id, ' 
+                                    'mp.name place_name, '
+                                    'mc.id company_id, '
+                                    'mc.name company_name, '
+                                    'md.name district_name, '
+                                    'md.id district_id, '
+                                    '(SELECT max(date) from main_review '
+                                    'WHERE place_id = mp.id) review_date, '
+                                    '(SELECT id from main_review '
+                                    'WHERE place_id = mp.id) review_id '                                    
+                                    'FROM main_place as mp '
+                                    'LEFT JOIN main_company as mc, main_district as md '
+                                    'ON mc.id=mp.company_id and md.id = mp.district_id ')
 #    stores = StoreDetail.all_stores()
     stores = Place.objects.all()
     concurent_stores = Place.objects.filter(owner__lt=1).all()

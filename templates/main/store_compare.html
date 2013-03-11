@@ -38,7 +38,7 @@
 		<div>{% if q.company_name %}<a href="/company/{{ q.company_id }}/">{{ q.company_name }}</a>{% else %}N/A{% endif %}</div>
 		<div>{% if q.district_name %}<a href="/district/{{ q.district_id }}/">{{ q.district_name }}</a>{% else %}N/A{% endif %}</div>
 		<div>{% if q.pos_quantity %}{% else %}N/A{% endif %}</div>
-		<div>{% if q.review %}{{ q.review }}{% else %}N/A{% endif %}</div>
+		<div>{% if q.review_date %}<a href="/review/{{ q.review_id }}/">{{ q.review_date }}</a>{% else %}N/A{% endif %}</div>
 		<div>{% if q.customers %}{% else %}N/A{% endif %}</div>
 		<div>{% if q.price_bythim %}{% else %}N/A{% endif %}</div>
 		<div>{% if q.price_tovdoma %}{% else %}N/A{% endif %}</div>
@@ -80,7 +80,7 @@
 {% else %}
     <p>Нет магазинов!</p>
 {% endif %}
-<!-->
+
 
 <br>
 	{% for x in stores_q %}
@@ -91,6 +91,6 @@
 	{% for place in stores %}
 		{{ place.name }} , {{ place.review.date }}
 	{% endfor %}
-	
+<!-->	
 </body>
 </html>

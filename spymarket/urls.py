@@ -16,7 +16,10 @@ urlpatterns = patterns('',
 
     url(r'^review/(?P<review_id>\d+)/$', 'main.views.review_detail'),
     url(r'^contact/', 'main.views.contact'),
+    url(r'^contact1/', 'main.views.contact1'),
     
+    url(r'^review_add/', 'main.views.review_add'),
+        
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

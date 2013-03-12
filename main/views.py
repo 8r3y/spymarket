@@ -1,6 +1,6 @@
 # Create your views here.
 from django.template import Context, loader, RequestContext
-from main.models import Place, Company, Concurent, District, Review, StoreDetail, Stores_q, Price, Card, Message
+from main.models import Place, Company, Concurent, District, Review, StoreDetail, Price, Card, Message, MessageForm, ReviewForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -43,7 +43,7 @@ def store_list(request):
     return HttpResponse(t.render(c))
 
 def store_compare(request):
-    stores_q = Stores_q.objects.raw('SELECT mp.id id, ' 
+    stores_q = Place.objects.raw('SELECT mp.id id, ' 
                                     'mp.name place_name, '
                                     'mc.id company_id, '
                                     'mc.name company_name, '
@@ -115,32 +115,64 @@ def review_detail(request, review_id):
     
 def contact(request):
     errors = []
-    p = Message.objects.all()
+#    p = Message.objects.all()
+    form = MessageForm(request.POST or None)
+    context = {
+               'subject': request.POST.get('subject', ''),
+               'message': request.POST.get('message', ''),
+               'email': request.POST.get('email', ''),
+               'errors': errors, 
+               }
     if request.method == 'POST':
         if not request.POST.get('subject', ''):
             errors.append('Enter a subject.')
         if not request.POST.get('message', ''):
             errors.append('Enter a message.')
+        if not request.POST.get('email'):
+            errors.append('Enter an email')
         if request.POST.get('email') and '@' not in request.POST['email']:
             errors.append('Enter a valid e-mail address.')
         if not errors:
-            p.message = request.POST.get('message')
-            p.message.save()
-            p.subject = request.POST.get('subject')
-            p.save()
-            p.email = request.POST.get('email')
-            p.save()
+            if request.method == 'POST' and form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/contact/')
+    return TemplateResponse(request, 'main/contact_form.html', context)
+#            p.message = request.POST.get('message')
+#            p.message.save()
+#            p.subject = request.POST.get('subject')
+#            p.save()
+#            p.email = request.POST.get('email')
+#            p.save()
 #            send_mail(
 #                request.POST['subject'],
 #                request.POST['message'],
 #                request.POST.get('email', 'noreply@example.com'),
 #                ['mind_art@mail.ru'],
 #            )
-            return HttpResponseRedirect('/contact/thanks/')
-    return TemplateResponse(request, 'main/contact_form.html', {
-        'errors': errors,
-        'subject': request.POST.get('subject', ''),
-        'message': request.POST.get('message', ''),
-        'email': request.POST.get('email', ''),
-    })
+#            return HttpResponseRedirect('/contact/thanks/')
+#    return TemplateResponse(request, 'main/contact_form.html', {
+#        'errors': errors,
+#        'subject': request.POST.get('subject', ''),
+#        'message': request.POST.get('message', ''),
+#        'email': request.POST.get('email', ''),
+#    })
     
+def contact1(request):
+    p = Message(subject='Test_subj', message='Test_message', email='Test@email.com')
+    p.save()
+    return HttpResponseRedirect('/contact/')
+
+def review_add(request):
+    errors = []
+    form = ReviewForm(request.POST or None)
+    r = Review.objects.get(id=self.review_id)
+    context = {
+               'form': form,
+               'errors': errors, 
+               }
+    if request.method == 'POST':
+        if not errors:
+            if request.method == 'POST' and form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('main.views.review_edit', args=(r)))        
+    return TemplateResponse(request, 'main/review_add.html', context)        

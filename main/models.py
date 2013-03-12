@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 # Create your models here.
 class Classif(models.Model):
@@ -52,7 +53,7 @@ class Price(models.Model):
     price = models.FloatField()
     price_delta = models.FloatField()
     def __unicode__ (self):
-        return u'%s %s %s' % (self.review, self.sku, self.price) 
+        return u'%s - %s - %s - %s' % (self.review.date, self.review.place.name, self.sku, self.price) 
     
 class Concurent(models.Model): 
     store = models.ForeignKey(Place, related_name='our')
@@ -65,18 +66,17 @@ class StoreDetail(models.Manager):
     def all_stores(self):
         from django.db import connection
         cursor = connection.cursor()
-        cursor.execute("""
-                select * from main_place as mp
-                left join main_review as mr on mp.id = mr.place_id
-            """)
+        cursor.execute('select * from main_place as mp '
+                       'left join main_review as mr on mp.id = mr.place_id'
+                       )
         result_list = cursor.fetchall()
         return result_list
     
-class Stores_q(models.Model):
-    place_name = models.CharField(max_length=200)
-    district_name = models.CharField(max_length=200)
-    company_name = models.CharField(max_length=200)
-    review = models.DateField()
+#class Stores_q(models.Model):
+#    place_name = models.CharField(max_length=200)
+#    district_name = models.CharField(max_length=200)
+#    company_name = models.CharField(max_length=200)
+#    review = models.DateField()
     
 class Classif_price(models.Model):
     review = models.ForeignKey(Review)
@@ -87,7 +87,33 @@ class Classif_price(models.Model):
 
 class Message(models.Model):
     subject = models.CharField(max_length=200)
-    massage = models.CharField(max_length=200)
+    message = models.CharField(max_length=200)
     email = models.EmailField()
 
-            
+    class Meta:
+        ordering = ('-subject',)
+
+    def __unicode__(self):
+        return self.subject
+    
+class MessageForm(forms.ModelForm):
+    
+    class Meta:
+        model = Message
+#        fields = ('subject', 'message', 'email',)
+        
+    def save(self):
+        obj = super(MessageForm, self).save(commit=False)
+        return obj.save()
+#    def get(self):
+#        obj = super(MessageForm, self).__get__(MessageForm.fields)
+#        return obj
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('id', 'place', 'date', 'user_name', 'pos', 'cheque', 'pub_date')
+    
+    def save(self):
+        obj = super(ReviewForm, self).save(commit=False)
+        return obj.save()   

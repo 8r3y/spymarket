@@ -1,4 +1,4 @@
-from main.models import Card, Review, Price, District, Place, Company, Concurent, Classif_price, Classif
+from main.models import Card, Review, Price, District, Place, Company, Concurent, Classif_price, Classif, Message
 from django.contrib import admin
 
 class ReviewAdmin(admin.ModelAdmin):
@@ -18,3 +18,4 @@ admin.site.register(Place)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Classif_price)
 admin.site.register(Classif)
+admin.site.register(Message)

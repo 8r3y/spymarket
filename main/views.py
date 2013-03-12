@@ -1,6 +1,6 @@
 # Create your views here.
 from django.template import Context, loader, RequestContext
-from main.models import Place, Company, Concurent, District, Review, StoreDetail, Stores_q, Price, Card
+from main.models import Place, Company, Concurent, District, Review, StoreDetail, Stores_q, Price, Card, Message
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -115,6 +115,7 @@ def review_detail(request, review_id):
     
 def contact(request):
     errors = []
+    p = Message.objects.all()
     if request.method == 'POST':
         if not request.POST.get('subject', ''):
             errors.append('Enter a subject.')
@@ -123,12 +124,18 @@ def contact(request):
         if request.POST.get('email') and '@' not in request.POST['email']:
             errors.append('Enter a valid e-mail address.')
         if not errors:
-            send_mail(
-                request.POST['subject'],
-                request.POST['message'],
-                request.POST.get('email', 'noreply@example.com'),
-                ['mind_art@mail.ru'],
-            )
+            p.message = request.POST.get('message')
+            p.message.save()
+            p.subject = request.POST.get('subject')
+            p.save()
+            p.email = request.POST.get('email')
+            p.save()
+#            send_mail(
+#                request.POST['subject'],
+#                request.POST['message'],
+#                request.POST.get('email', 'noreply@example.com'),
+#                ['mind_art@mail.ru'],
+#            )
             return HttpResponseRedirect('/contact/thanks/')
     return TemplateResponse(request, 'main/contact_form.html', {
         'errors': errors,

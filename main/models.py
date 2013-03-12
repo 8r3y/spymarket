@@ -83,4 +83,11 @@ class Classif_price(models.Model):
     classif = models.ForeignKey(Classif)
     price_delta = models.FloatField()
     def __unicode__ (self):
-        return u'%s %s %s' % (self.review, self.classif, self.price_delta)        
+        return u'%s %s %s' % (self.review, self.classif, self.price_delta)
+
+class Message(models.Model):
+    subject = models.CharField(max_length=200)
+    massage = models.CharField(max_length=200)
+    email = models.EmailField()
+
+            

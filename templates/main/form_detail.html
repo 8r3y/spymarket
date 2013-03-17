@@ -12,8 +12,8 @@
 </form>
 
 
-{% for x in price_link %}
-<p>{{ x.price }}, {{ x.sku }}, {{ x.review }}, {{ x.review.date }}, {{ price_link }}</p>
+{% for price in price_link %}
+<p>{{ price.price }}, {{ price.sku }}, {{ price.review.date }}, {{ price.review.place }}, {{ price.base_price }}, {{ price.name }}, {{ price.classif.name }}</p>
 {% endfor %}
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}

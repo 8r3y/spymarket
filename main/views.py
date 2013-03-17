@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.template.response import TemplateResponse
 from django.contrib.formtools.wizard.views import SessionWizardView
 from main.forms import ReviewForm1, ReviewForm2
+from itertools import chain
 
 #from django.db import connection, transaction
 
@@ -96,12 +97,9 @@ def review_detail(request, review_id):
     p = Place.objects.get(id=4)
     cards = Card.objects.all()
     classif = Card.objects.distinct()
-    price_link = []
-    for i in range(len(cards)):
-        i=i+1
-        card_link = Card.objects.get(pk=i)
-        a = card_link.price_set.all()
-        price_link.append(a)
+    card_list = Card.objects.all()
+    price_list = Price.objects.all()
+    price_link = list(chain(card_list, price_list))
 
     try:
         selected_choice = p.review_set.get(pk=request.POST['place'])

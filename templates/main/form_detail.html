@@ -4,22 +4,17 @@
 {{ review.user_name }}<br>
 {{ review.place.name }}<br>
 
-{% for card in cards %}
-{{ card.classif_name }}<br>
-{{ card.name }}<br>
-{{ card.base_price }}<br>
-{% endfor %}
-
-
 <form action="/review_detail/" method="post">{% csrf_token %}
 {% for card in cards %}
-<p>{{ card.classif_name }}, {{ card.base_price }}<input type="text" name="{{ card.id }}"></p>
+<p>{{ card.classif.name }}, {{ card.name }}, {{ card.base_price }}<input type="text" name="{{ card.id }}">, {{ card.price_link.price }}</p>
 {% endfor %}
         <input type="submit" value="Сохранить">
 </form>
 
 
-
+{% for x in price_link %}
+<p>{{ x.price }}, {{ x.sku }}, {{ x.review }}, {{ x.review.date }}, {{ price_link }}</p>
+{% endfor %}
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 

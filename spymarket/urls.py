@@ -1,5 +1,8 @@
 from django.conf.urls import patterns, include, url
 
+from main.forms import ReviewForm1, ReviewForm2
+from main.views import ReviewWizard, FORMS
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -15,10 +18,12 @@ urlpatterns = patterns('',
     url(r'^store/', 'main.views.store_compare', name='store_compare'),
 
     url(r'^review/(?P<review_id>\d+)/$', 'main.views.review_detail'),
-    url(r'^contact/', 'main.views.contact'),
-    url(r'^contact1/', 'main.views.contact1'),
+#    url(r'^contact/', 'main.views.contact'),
+#    url(r'^contact1/', 'main.views.contact1'),
     
     url(r'^review_add/', 'main.views.review_add'),
+    
+    url(r'^review_wizard/$', ReviewWizard.as_view(FORMS), name='add_review_wizard'),    
         
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

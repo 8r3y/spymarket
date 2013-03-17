@@ -6,6 +6,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.template.response import TemplateResponse
+from django.contrib.formtools.wizard.views import SessionWizardView
+from main.forms import ReviewForm1, ReviewForm2
 
 #from django.db import connection, transaction
 
@@ -94,15 +96,22 @@ def review_detail(request, review_id):
     p = Place.objects.get(id=4)
     cards = Card.objects.all()
     classif = Card.objects.distinct()
+    price_link = []
+    for i in range(len(cards)):
+        i=i+1
+        card_link = Card.objects.get(pk=i)
+        a = card_link.price_set.all()
+        price_link.append(a)
+
     try:
         selected_choice = p.review_set.get(pk=request.POST['place'])
     except (KeyError, Review.DoesNotExist):
-        # Redisplay the poll voting form.
         return render_to_response('main/form_detail.html', {
             'classif': classif,                                                
             'cards': cards,                                                
             'place': p,
             'review': r,
+            'price_link': price_link,
             'error_message': "You didn't select a choice.",
         }, context_instance=RequestContext(request))
     else:
@@ -165,7 +174,7 @@ def contact1(request):
 def review_add(request):
     errors = []
     form = ReviewForm(request.POST or None)
-    r = Review.objects.get(id=self.review_id)
+#    r = Review.objects.get(id=self.review_id)
     context = {
                'form': form,
                'errors': errors, 
@@ -174,5 +183,48 @@ def review_add(request):
         if not errors:
             if request.method == 'POST' and form.is_valid():
                 form.save()
-                return HttpResponseRedirect(reverse('main.views.review_edit', args=(r)))        
-    return TemplateResponse(request, 'main/review_add.html', context)        
+#                return HttpResponseRedirect(reverse('main.views.review_edit', args=(r)))        
+    return TemplateResponse(request, 'main/review_add.html', context)    
+
+# Djangobook examples here:
+
+FORMS = [("place", ReviewForm1),
+         ("card", ReviewForm2)]
+
+TEMPLATES = {"place": "main/place_form.html",
+             "card": "main/card_form.html"}
+
+class ReviewWizard(SessionWizardView):
+    cards = Card.objects.all() 
+
+    def get_template_names(self):
+        return [TEMPLATES[self.steps.current]]
+
+    def get_context_data(self, form, **kwargs):
+        context = super(ReviewWizard, self).get_context_data(form=form, **kwargs)
+        if self.steps.current == 'card':
+            context.update({'ok': 'True'})
+        return context
+   
+#    def done(self, form_list, **kwargs):
+#        return render_to_response('done.html', {
+#            'form_data': [form.cleaned_data for form in form_list],
+#        })
+    def done(self, form_list, **kwargs):
+        place_form    = form_list[0].cleaned_data
+        card_form   = form_list[1].cleaned_data
+        r = Review.objects.create(
+            date        =   place_form['date'],
+            pub_date    =   place_form['pub_date'],
+            user_name   =   place_form['user_name'],
+            pos         =   place_form['pos'],
+            cheque      =   place_form['cheque'],
+            place       =   place_form['place'],
+        )
+        p = Price.objects.create(
+            review      =   r,
+            sku         =   card_form['sku'],
+            price       =   card_form['price'],
+            price_delta =   card_form['price_delta'],
+        )
+        return HttpResponseRedirect(reverse('main.views.review_detail', args=(r.id,)))

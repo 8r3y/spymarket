@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
+
+{% block content %}
+<p>Card_form.html</p>
+<p>Шаг {{ wizard.steps.step1 }} из {{ wizard.steps.count }}</p>
+<form action="" method="post">{% csrf_token %}
+<table>
+{{ wizard.management_form }}
+    {% for item in wizard.form %}
+    {{ wizard.form }}
+    {% endfor %}
+
+{{ form.initial.field_name}} 
+</table>
+{% if wizard.steps.prev %}
+<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Назад...</button>
+{% endif %}
+<input type="submit" value="Продолжить..."/>
+</form>
+{% for card in cards %}
+	{{ card.name }} куку
+{% endfor %}
+{% endblock %}

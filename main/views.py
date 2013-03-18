@@ -98,9 +98,10 @@ def review_detail(request, review_id):
     cards = Card.objects.all()
     classif = Card.objects.distinct()
     card_list = Card.objects.all()
-    price_list = Price.objects.all()
-    price_link = list(chain(card_list, price_list))
-
+#    price_link = list(chain(card_list, price_list))
+    reviewlist = Review.objects.get(pk=review_id)
+    pricelist = reviewlist.price_set.all()
+        
     try:
         selected_choice = p.review_set.get(pk=request.POST['place'])
     except (KeyError, Review.DoesNotExist):
@@ -109,7 +110,8 @@ def review_detail(request, review_id):
             'cards': cards,                                                
             'place': p,
             'review': r,
-            'price_link': price_link,
+            'reviewlist': reviewlist,
+            'pricelist': pricelist,
             'error_message': "You didn't select a choice.",
         }, context_instance=RequestContext(request))
     else:
